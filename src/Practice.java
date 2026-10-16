@@ -151,7 +151,21 @@ private static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, i
    * @return whether there exists a valid positive path from starting to ending
    */
   public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int starting, int ending) {
-    return false;
+    Set<Integer> visited = new HashSet<>();
+
+    boolean positivePath = positivePathExists(graph, starting, visited);
+    return positivePath;
+  }
+
+  public static boolean positivePathExists(Map<Integer, Set<Integer>> graph, int current, Set<Integer> visited){
+    if(visited.contains(current)) return false;
+    visited.add(current);
+
+    for(int neighbor: graph.get(current)){
+      if(neighbor%2 != 0) return false;
+    }
+
+    return true;
   }
 
   /**
@@ -164,6 +178,19 @@ private static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, i
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
+    Set<Professional> visited = new HashSet<>();
+    return hasExtendedConnectionAtCompany(person, companyName, visited);
+  }
+
+  public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName, Set<Professional> visited){
+    if(person==null || visited.contains(person)) return false;
+    visited.add(person);
+
+    if(companyName.equals(person.getCompany())) return true;
+
+    for(Professional connection : person.getConnections()){
+      if(hasExtendedConnectionAtCompany(connection, companyName, visited)) return true;
+    }
     return false;
   }
 
