@@ -66,25 +66,22 @@ public class Practice {
    * @return a sorted list of all reachable vertex values by 
    */
   public static List<Integer> sortedReachable(Vertex<Integer> starting) {
-    Set<Vertex<Integer>> visited = new HashSet<>();
-    List<Integer> allReached = sortedReachable(starting, visited);
-    Collections.sort(allReached);
-    return allReached;
+    return sortedReachable(starting, new HashSet<>(), new ArrayList<>());
   }
 
-  private static List<Integer> sortedReachable(Vertex<Integer> current, Set<Vertex<Integer>> visited){
-    if(current==null) return new ArrayList<>();
-    if(visited.contains(current)) return new ArrayList<>();
+  private static List<Integer> sortedReachable(Vertex<Integer> current, Set<Vertex<Integer>> visited, List<Integer> nums){
+    if(current==null || visited.contains(current)) return new ArrayList<>();
     visited.add(current);
 
-    List<Integer> allReached = new ArrayList<>();
-    allReached.add(current.data);
+    nums.add(current.data);
 
-    for(Vertex<Integer> neighbor : current.neighbors){
-      allReached.addAll(sortedReachable(neighbor, visited));
+    for(Vertex<Integer> neighbor: current.neighbors){
+      sortedReachable(neighbor, visited, nums);
     }
 
-    return allReached;
+    Collections.sort(nums);
+
+    return nums;
   }
 
   /**
@@ -98,27 +95,23 @@ public class Practice {
    * @return a sorted list of all reachable vertex values
    */
   public static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int starting) {
-    if (!graph.containsKey(starting)) return new ArrayList<>();
-
-    Set<Integer> visited = new HashSet<>();
-    List<Integer> allReached = sortedReachable(graph, starting, visited);
-    Collections.sort(allReached);
-    return allReached;
+    return sortedReachable(graph, starting, new HashSet<>(), new ArrayList<>());
   }
 
-private static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int current, Set<Integer> visited) {
-    if (visited.contains(current)) return new ArrayList<>();
+  private static List<Integer> sortedReachable(Map<Integer, Set<Integer>> graph, int current, Set<Integer> visited, List<Integer> nums){
+    if(visited.contains(current) || !graph.containsKey(current)) return new ArrayList<>();
     visited.add(current);
 
-    List<Integer> allReached = new ArrayList<>();
-    allReached.add(current);
+    nums.add(current);
 
-    for (int neighbor : graph.get(current)) {
-        allReached.addAll(sortedReachable(graph, neighbor, visited));
+    for(int neighbor : graph.get(current)){
+      sortedReachable(graph, neighbor, visited, nums);
     }
 
-    return allReached;
-}
+    Collections.sort(nums);
+
+    return nums;
+  }
 
   /**
    * Returns true if and only if it is possible both to reach v2 from v1 and to reach v1 from v2.
