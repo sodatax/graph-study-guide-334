@@ -184,19 +184,19 @@ public class Practice {
    * @return true if a person in the extended network works at the specified company, false otherwise
    */
   public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName) {
-    Set<Professional> visited = new HashSet<>();
-    return hasExtendedConnectionAtCompany(person, companyName, visited);
+    return hasExtendedConnectionAtCompany(person, companyName, new HashSet<>());
   }
 
-  public static boolean hasExtendedConnectionAtCompany(Professional person, String companyName, Set<Professional> visited){
-    if(person==null || visited.contains(person)) return false;
-    visited.add(person);
+  public static boolean hasExtendedConnectionAtCompany(Professional currentPerson, String targetCompany, Set<Professional> visited){
+    if(currentPerson==null || targetCompany==null || visited.contains(currentPerson)) return false;
+    visited.add(currentPerson);
 
-    if(companyName.equals(person.getCompany())) return true;
+    if(currentPerson.getCompany()==targetCompany) return true;
 
-    for(Professional connection : person.getConnections()){
-      if(hasExtendedConnectionAtCompany(connection, companyName, visited)) return true;
+    for(Professional person : currentPerson.getConnections()){
+      if(hasExtendedConnectionAtCompany(person, targetCompany, visited)) return true;
     }
+
     return false;
   }
 
