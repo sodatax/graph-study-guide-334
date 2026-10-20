@@ -268,41 +268,17 @@ public class Practice {
    * @return an unsorted list of next moves
    */
   public static List<int[]> nextMoves(char[][] board, int[] current, int[][] directions) {
-    return possibleMoves(board, current);
-  }
-
-  public static List<int[]> possibleMoves(char[][] board, int[] current){
-    int curR = current[0];
-    int curC = current[1];
+    List<int[]> nextPossibleMoves = new ArrayList<>();
     
-    int newR, newC;
-    List<int[]> possible = new ArrayList<>();
+    for(int[] move : directions){
+      int newR = current[0] + move[0];
+      int newC = current[1] + move[1];
 
-    //up
-    newR = curR -1;
-    newC = curC;
-    if(newR >= 0 && board[newR][newC] != 'X'){
-        possible.add(new int[] {newR, newC});
+      if(newR >= 0 && newR < board.length &&
+        newC >= 0 && newC < board[0].length &&
+        board[newR][newC] != 'X') nextPossibleMoves.add(new int[]{newR, newC});
     }
-    //down
-    newR = curR +1;
-    newC = curC;
-    if(newR < board.length && board[newR][newC] != 'X'){
-        possible.add(new int[] {newR, newC});
-    }
-    //left
-    newR = curR;
-    newC = curC -1;
-    if(newC >= 0 && board[newR][newC] != 'X'){
-        possible.add(new int[] {newR, newC});
-    }
-    //right
-    newR = curR;
-    newC = curC+1;
-    if(newC < board[newR].length && board[newR][newC] != 'X'){
-        possible.add(new int[] {newR, newC});
-    }
-
-    return possible;
+    
+    return nextPossibleMoves;
   }
 }
